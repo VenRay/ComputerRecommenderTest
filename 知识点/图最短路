@@ -1,0 +1,50 @@
+单源最短路：求图中某顶点到其他顶点的最短路径。
+Dijkstra 算法采用贪心算法（Greedy Algorithm）范式进行设计。在最短路径问题中，对于带权有向图 G = (V, E)，Dijkstra 算法的初始实现版本未使用最小优先队列实现，其时间复杂度为 O(V2)，基于 Fibonacci heap 的最小优先队列实现版本，其时间复杂度为 O(E + VlogV)
+两个数组：visit, len
+1.//先初始化源点到其他点的距离和visit 
+    for(i = 1 ; i <= n ; i ++){	//初始化 
+        visit[i] = 0;	//一开始每个点都没被访问 
+        len[i] = map[from][i];	//先假设源点到其他点的距离 
+    }  
+2,找到权重最小的边
+        for(j = 1 ; j <= n ; ++j){	
+            if(!visit[j] && min > len[j]){  
+                pos = j;  
+                min = len[j];  
+            }  
+        } 
+	visit[pos] = 1;
+3，更改最短路
+for(j = 1 ; j <= n ; ++j){
+            if(!visit[j] && (len[j] > (len[pos] +map[pos][j]))){ //如果j节点没有被访问过&&j节点到源节点的最短路径>pos节点到源节点的最短路径+pos节点到j节点的路径  
+                len[j] = len[pos] + map[pos][j];	//更新j节点到源节点的最短路径	
+            }  
+        }  
+代码：
+
+    for(i = 1 ; i <= n ; i ++){	//初始化 
+        visit[i] = 0;	//一开始每个点都没被访问 
+        len[i] = map[from][i];	//先假设源点到其他点的距离 
+    }  
+    int j;  
+    for(i = 1 ; i < n ; ++i){	//对除源点的每一个点进行最短计算 
+        int min = INF;  //记录最小len[i] 
+        int pos;  //记录小len[i] 的点 
+  
+        for(j = 1 ; j <= n ; ++j){	
+            if(!visit[j] && min > len[j]){  
+                pos = j;  
+                min = len[j];  
+            }  
+        }  
+        visit[pos] = 1;  
+  
+        for(j = 1 ; j <= n ; ++j){
+            if(!visit[j] && (len[j] > (len[pos] +map[pos][j]))){ //如果j节点没有被访问过&&j节点到源节点的最短路径>pos节点到源节点的最短路径+pos节点到j节点的路径  
+                len[j] = len[pos] + map[pos][j];	//更新j节点到源节点的最短路径	
+            }  
+        }  
+    }  
+  
+    return len[to];
+}
